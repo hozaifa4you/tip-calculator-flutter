@@ -10,9 +10,48 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'UTip App',
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
-      home: null,
+      home: const UTip(),
+    );
+  }
+}
+
+class UTip extends StatefulWidget {
+  const UTip({super.key});
+
+  @override
+  State<UTip> createState() => _UTipState();
+}
+
+class _UTipState extends State<UTip> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("UTip")),
+      body: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.deepPurple,
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            padding: const EdgeInsets.all(8.0),
+            child: const Column(
+              children: [
+                Text(
+                  "Welcome to UTip!",
+                  style: TextStyle(color: Colors.white70, fontSize: 18.0),
+                ),
+                Text(
+                  "Welcome to UTip!",
+                  style: TextStyle(color: Colors.white70, fontSize: 18.0),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
