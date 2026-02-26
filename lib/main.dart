@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tip_calculator/widgets/person_counter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -105,27 +106,11 @@ class _UTipState extends State<UTip> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Split", style: theme.textTheme.titleMedium),
-                        Row(
-                          children: [
-                            IconButton(
-                              onPressed: decrement,
-                              icon: Icon(Icons.remove),
-                            ),
-                            Text(
-                              "$_personCount",
-                              style: theme.textTheme.titleMedium,
-                            ),
-                            IconButton(
-                              onPressed: increment,
-                              icon: Icon(Icons.add),
-                            ),
-                          ],
-                        ),
-                      ],
+                    child: PersonCounter(
+                      theme: theme,
+                      personCount: _personCount,
+                      onDecrement: decrement,
+                      onIncrement: increment,
                     ),
                   ),
                 ],
