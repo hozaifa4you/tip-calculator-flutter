@@ -27,25 +27,33 @@ class UTip extends StatefulWidget {
 class _UTipState extends State<UTip> {
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+
+    final style = theme.textTheme.titleMedium!.copyWith(
+      color: theme.colorScheme.onPrimary,
+      fontWeight: FontWeight.bold,
+    );
+
     return Scaffold(
       appBar: AppBar(title: const Text("UTip")),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.deepPurple,
+              color: theme.colorScheme.primaryFixedDim,
               borderRadius: BorderRadius.circular(8.0),
             ),
-            padding: const EdgeInsets.all(8.0),
-            child: const Column(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
               children: [
+                Text("Total per Person", style: style),
                 Text(
-                  "Welcome to UTip!",
-                  style: TextStyle(color: Colors.white70, fontSize: 18.0),
-                ),
-                Text(
-                  "Welcome to UTip!",
-                  style: TextStyle(color: Colors.white70, fontSize: 18.0),
+                  "Price: \$9.99",
+                  style: style.copyWith(
+                    fontSize: theme.textTheme.displaySmall?.fontSize,
+                    color: theme.colorScheme.onPrimary,
+                  ),
                 ),
               ],
             ),
