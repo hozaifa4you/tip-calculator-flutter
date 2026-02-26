@@ -30,6 +30,11 @@ class UTip extends StatefulWidget {
 class _UTipState extends State<UTip> {
   int _personCount = 1;
   double _tipPercentage = 10.0;
+  double _billTotal = 100.00;
+
+  double totalPerPerson() {
+    return ((_billTotal * _tipPercentage) + _billTotal) / _personCount;
+  }
 
   void increment() {
     setState(() {
@@ -51,9 +56,15 @@ class _UTipState extends State<UTip> {
     });
   }
 
+  double totalTip() {
+    return ((_billTotal * _tipPercentage) + _billTotal);
+  }
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    double total = totalPerPerson();
+    double totalTipAmount = totalTip();
 
     final style = theme.textTheme.titleMedium!.copyWith(
       color: theme.colorScheme.onPrimary,
@@ -77,7 +88,7 @@ class _UTipState extends State<UTip> {
                 children: [
                   Text("Total per Person", style: style),
                   Text(
-                    "Price: \$9.99",
+                    "Price: \$${total.toStringAsFixed(2)}",
                     style: style.copyWith(
                       fontSize: theme.textTheme.displaySmall?.fontSize,
                       color: theme.colorScheme.onPrimary,
@@ -99,8 +110,12 @@ class _UTipState extends State<UTip> {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: BillAmountField(
-                      billAmount: "100",
-                      onChanged: (value) {},
+                      billAmount: _billTotal.toStringAsFixed(2),
+                      onChanged: (value) {
+                        setState(() {
+                          _billTotal = double.tryParse(value) ?? 0.0;
+                        });
+                      },
                     ),
                   ),
                   Padding(
@@ -119,7 +134,7 @@ class _UTipState extends State<UTip> {
                       children: [
                         Text("Tip", style: theme.textTheme.titleMedium),
                         Text(
-                          "\$${(_tipPercentage / 100 * 20).toStringAsFixed(2)}",
+                          "\$${totalTipAmount.toStringAsFixed(2)}",
                           style: theme.textTheme.titleMedium,
                         ),
                       ],
