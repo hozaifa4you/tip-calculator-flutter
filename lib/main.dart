@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:tip_calculator/providers/tip_calculator_model.dart';
 import 'package:tip_calculator/widgets/bill_amount_field.dart';
 import 'package:tip_calculator/widgets/person_counter.dart';
 import 'package:tip_calculator/widgets/tops_slider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => TipCalculatorModel(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -28,43 +35,10 @@ class UTip extends StatefulWidget {
 }
 
 class _UTipState extends State<UTip> {
-  int _personCount = 1;
-  double _tipPercentage = 10.0;
-  double _billTotal = 100.00;
-
-  double totalPerPerson() {
-    return ((_billTotal * _tipPercentage) + _billTotal) / _personCount;
-  }
-
-  void increment() {
-    setState(() {
-      _personCount++;
-    });
-  }
-
-  void decrement() {
-    setState(() {
-      if (_personCount > 1) {
-        _personCount--;
-      }
-    });
-  }
-
-  void updateTipPercentage(double value) {
-    setState(() {
-      _tipPercentage = value;
-    });
-  }
-
-  double totalTip() {
-    return ((_billTotal * _tipPercentage) + _billTotal);
-  }
-
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    double total = totalPerPerson();
-    double totalTipAmount = totalTip();
+    final model = Provider.of<TipCalculatorModel>(context);
 
     final style = theme.textTheme.titleMedium!.copyWith(
       color: theme.colorScheme.onPrimary,
@@ -88,7 +62,7 @@ class _UTipState extends State<UTip> {
                 children: [
                   Text("Total per Person", style: style),
                   Text(
-                    "Price: \$${total.toStringAsFixed(2)}",
+                    "Price: \$${model.totalPerPerson.toStringAsFixed(2)}",
                     style: style.copyWith(
                       fontSize: theme.textTheme.displaySmall?.fontSize,
                       color: theme.colorScheme.onPrimary,
@@ -110,11 +84,9 @@ class _UTipState extends State<UTip> {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: BillAmountField(
-                      billAmount: _billTotal.toStringAsFixed(2),
+                      billAmount: model.billTotal.toStringAsFixed(2),
                       onChanged: (value) {
-                        setState(() {
-                          _billTotal = double.tryParse(value) ?? 0.0;
-                        });
+                        model.updateBillTotal(double.tryParse(value) ?? 0.0);
                       },
                     ),
                   ),
@@ -122,9 +94,13 @@ class _UTipState extends State<UTip> {
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: PersonCounter(
                       theme: theme,
-                      personCount: _personCount,
-                      onDecrement: decrement,
-                      onIncrement: increment,
+                      personCount: model.personCount,
+                      onDecrement: () => {
+                        if (model.personCount > 1)
+                          model.updatePersonCount(model.personCount - 1),
+                      },
+                      onIncrement: () =>
+                          model.updatePersonCount(model.personCount + 1),
                     ),
                   ),
                   Padding(
@@ -134,19 +110,19 @@ class _UTipState extends State<UTip> {
                       children: [
                         Text("Tip", style: theme.textTheme.titleMedium),
                         Text(
-                          "\$${totalTipAmount.toStringAsFixed(2)}",
+                          "\$${model.tipPercentage.toStringAsFixed(2)}",
                           style: theme.textTheme.titleMedium,
                         ),
                       ],
                     ),
                   ),
                   Text(
-                    "${_tipPercentage.toStringAsFixed(2)}% Tip",
+                    "${model.tipPercentage.toStringAsFixed(2)}% Tip",
                     style: theme.textTheme.titleMedium,
                   ),
                   TipsSlider(
-                    tipPercentage: _tipPercentage,
-                    onChanged: updateTipPercentage,
+                    tipPercentage: model.tipPercentage,
+                    onChanged: model.updateTipPercentage,
                   ),
                 ],
               ),
