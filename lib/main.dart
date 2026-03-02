@@ -42,10 +42,8 @@ class _UTipState extends State<UTip> {
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<TipCalculatorModel>(context);
-    final theme = Provider.of<ThemeProvider>(
-      context,
-      listen: false,
-    ).currentTheme;
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    final theme = themeProvider.currentTheme;
 
     final style = theme.textTheme.titleMedium!.copyWith(
       color: theme.colorScheme.onPrimary,
@@ -53,7 +51,19 @@ class _UTipState extends State<UTip> {
     );
 
     return Scaffold(
-      appBar: AppBar(title: const Text("UTip")),
+      appBar: AppBar(
+        title: const Text("UTip"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              themeProvider.toggleTheme();
+            },
+            icon: themeProvider.isDarkMode
+                ? Icon(Icons.wb_sunny)
+                : Icon(Icons.nights_stay),
+          ),
+        ],
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
