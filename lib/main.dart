@@ -110,7 +110,7 @@ class _UTipState extends State<UTip> {
                       children: [
                         Text("Tip", style: theme.textTheme.titleMedium),
                         Text(
-                          "\$${model.tipPercentage.toStringAsFixed(2)}",
+                          "\$${model.tipAmount.toStringAsFixed(2)}",
                           style: theme.textTheme.titleMedium,
                         ),
                       ],

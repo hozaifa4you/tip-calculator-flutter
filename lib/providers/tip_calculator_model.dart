@@ -25,7 +25,9 @@ class TipCalculatorModel with ChangeNotifier {
     notifyListeners();
   }
 
+  double get tipAmount => _billTotal * _tipPercentage / 100;
+
   double get totalPerPerson {
-    return ((_billTotal * _tipPercentage) + _billTotal) / _personCount;
+    return (_billTotal + tipAmount) / _personCount;
   }
 }
