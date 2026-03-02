@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tip_calculator/providers/theme_provider.dart';
 import 'package:tip_calculator/providers/tip_calculator_model.dart';
 import 'package:tip_calculator/widgets/bill_amount_field.dart';
 import 'package:tip_calculator/widgets/person_counter.dart';
@@ -7,8 +8,11 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => TipCalculatorModel(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => TipCalculatorModel()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -21,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'UTip App',
-      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
+      theme: Provider.of<ThemeProvider>(context).currentTheme,
       home: const UTip(),
     );
   }
@@ -37,8 +41,11 @@ class UTip extends StatefulWidget {
 class _UTipState extends State<UTip> {
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
     final model = Provider.of<TipCalculatorModel>(context);
+    final theme = Provider.of<ThemeProvider>(
+      context,
+      listen: false,
+    ).currentTheme;
 
     final style = theme.textTheme.titleMedium!.copyWith(
       color: theme.colorScheme.onPrimary,
